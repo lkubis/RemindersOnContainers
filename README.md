@@ -1,1 +1,1 @@
-# RemindersOnContainers - Microservices Architecture and Containers based Sample application (Visual Studio 2017)
+# RemindersOnContainers - Microservices Architecture and Containers based Sample Application (Visual Studio 2017)
