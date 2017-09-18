@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.15
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C27B52D5-B6C7-41FA-B278-0C97222A58B3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{C6A790A3-1B2F-432B-BBAC-A430BD335C26}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{C52AB5C5-98F0-4694-909B-8A929A422958}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.API", "src\Services\Identity\Identity.API\Identity.API.csproj", "{90754A2D-97CB-41FE-ABB8-6499A70D549F}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{09E80B59-B806-457C-A998-9E83822CB2E1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{90754A2D-97CB-41FE-ABB8-6499A70D549F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90754A2D-97CB-41FE-ABB8-6499A70D549F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90754A2D-97CB-41FE-ABB8-6499A70D549F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90754A2D-97CB-41FE-ABB8-6499A70D549F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09E80B59-B806-457C-A998-9E83822CB2E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09E80B59-B806-457C-A998-9E83822CB2E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09E80B59-B806-457C-A998-9E83822CB2E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09E80B59-B806-457C-A998-9E83822CB2E1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C6A790A3-1B2F-432B-BBAC-A430BD335C26} = {C27B52D5-B6C7-41FA-B278-0C97222A58B3}
+		{C52AB5C5-98F0-4694-909B-8A929A422958} = {C6A790A3-1B2F-432B-BBAC-A430BD335C26}
+		{90754A2D-97CB-41FE-ABB8-6499A70D549F} = {C52AB5C5-98F0-4694-909B-8A929A422958}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7A47C412-FBD0-46E9-A77D-6FDEB053620C}
+	EndGlobalSection
+EndGlobal
