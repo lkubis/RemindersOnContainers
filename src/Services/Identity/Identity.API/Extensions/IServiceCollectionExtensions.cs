@@ -1,4 +1,5 @@
 ﻿using System;
+using Framework.Authentication.JwtBearer;
 using Identity.API.Configuration.Sections;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
@@ -42,8 +43,8 @@ namespace Identity.API.Extensions
             IConfigurationRoot configuration,
             IHostingEnvironment env)
         {
-            var o = new IdentityOptions();
-            configuration.GetSection("IdentityOptions").Bind(o);
+            var o = new JwtSecurityTokenOptions();
+            configuration.GetSection("IdentityOptions:JwtSecurityToken").Bind(o);
 
             services
                 .AddAuthentication(options =>
@@ -59,13 +60,13 @@ namespace Identity.API.Extensions
                     options.TokenValidationParameters = new TokenValidationParameters()
                     {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = o.JwtSecurityToken.SymetricSecurityKey,
+                        IssuerSigningKey = o.SymetricSecurityKey,
 
                         ValidateIssuer = true,
-                        ValidIssuer = o.JwtSecurityToken.Issuer,
+                        ValidIssuer = o.Issuer,
 
                         ValidateAudience = true,
-                        ValidAudience = o.JwtSecurityToken.Audience,
+                        ValidAudience = o.Audience,
 
                         ValidateLifetime = true,
                     };

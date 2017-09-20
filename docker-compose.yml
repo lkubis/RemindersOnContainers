@@ -1,15 +1,24 @@
 version: '3'
 
 services:
+
   identity.api:
-    image: identity.api
+    image: reminders/identity.api:${TAG:-latest}
     build:
       context: ./src/Services/Identity/Identity.API
       dockerfile: Dockerfile
     depends_on:
-      - postgres
+      - postgres.data
 
-  postgres:
+  webmvc:
+    image: reminders/webmvc:${TAG:-latest}
+    build:
+      context: ./src/Web/WebMVC
+      dockerfile: Dockerfile
+    depends_on:
+    - identity.api
+
+  postgres.data:
     image: postgres
     environment:
       POSTGRES_USER: sa

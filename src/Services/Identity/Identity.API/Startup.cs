@@ -1,4 +1,7 @@
-﻿using Identity.API.Data;
+﻿using System.Reflection;
+using Framework.Authentication.JwtBearer;
+using Identity.API.Configuration;
+using Identity.API.Data;
 using Identity.API.Extensions;
 using Identity.API.Models.Entities;
 using Microsoft.AspNetCore.Builder;
@@ -28,10 +31,15 @@ namespace Identity.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            // Service configuration
+            services.AddOptions();
+            services.Configure<ServiceConfiguration>(Configuration);
+            services.Configure<JwtSecurityTokenOptions>(Configuration.GetSection("IdentityOptions:JwtSecurityToken"));
+
             // DbContext (PostgreSQL)
             services.AddDbContext<DataContext>(options =>
                 options.UseNpgsql(Configuration["ConnectionStrings:DefaultConnection"],
-                x => x.MigrationsAssembly("Identity.API")));
+                x => x.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name)));
 
             // MVC
             services.AddMvc();
