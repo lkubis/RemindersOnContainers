@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.15
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C27B52D5-B6C7-41FA-B278-0C97222A58B3}"
 EndProject
@@ -25,7 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Resilience.Http", "src\Buil
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{A347C186-AA69-4639-A640-28FD4EC05677}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.Authentication.JwtBearer", "src\BuildingBlocks\Framework\Framework.Authentication.JwtBearer\Framework.Authentication.JwtBearer.csproj", "{97EF036E-4782-41FA-A659-4E2EC7466C4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework.Authentication.JwtBearer", "src\BuildingBlocks\Framework\Framework.Authentication.JwtBearer\Framework.Authentication.JwtBearer.csproj", "{97EF036E-4782-41FA-A659-4E2EC7466C4A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reminder", "Reminder", "{46B8A75E-72DC-41DA-97F0-68DEBF6E3ECD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reminder.API", "src\Services\Reminder\Reminder.API\Reminder.API.csproj", "{1C544D48-A0B5-4E9F-A8AE-E6181618C0C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +57,10 @@ Global
 		{97EF036E-4782-41FA-A659-4E2EC7466C4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97EF036E-4782-41FA-A659-4E2EC7466C4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97EF036E-4782-41FA-A659-4E2EC7466C4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C544D48-A0B5-4E9F-A8AE-E6181618C0C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C544D48-A0B5-4E9F-A8AE-E6181618C0C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C544D48-A0B5-4E9F-A8AE-E6181618C0C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C544D48-A0B5-4E9F-A8AE-E6181618C0C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,6 +76,8 @@ Global
 		{9C78B3CB-55C2-4E99-95C3-CAC76D7EB212} = {601A8658-9FDC-4704-87E9-B87416A6BAB9}
 		{A347C186-AA69-4639-A640-28FD4EC05677} = {3CE10586-0EAB-45DB-8B54-E293C596C65D}
 		{97EF036E-4782-41FA-A659-4E2EC7466C4A} = {A347C186-AA69-4639-A640-28FD4EC05677}
+		{46B8A75E-72DC-41DA-97F0-68DEBF6E3ECD} = {C6A790A3-1B2F-432B-BBAC-A430BD335C26}
+		{1C544D48-A0B5-4E9F-A8AE-E6181618C0C7} = {46B8A75E-72DC-41DA-97F0-68DEBF6E3ECD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7A47C412-FBD0-46E9-A77D-6FDEB053620C}

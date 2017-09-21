@@ -10,6 +10,14 @@ services:
     depends_on:
       - postgres.data
 
+  reminder.api:
+    image: reminders/reminders.api:${TAG:-latest}
+    build:
+      context: ./src/Services/Reminder/Reminder.API
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres.data
+
   webmvc:
     image: reminders/webmvc:${TAG:-latest}
     build:

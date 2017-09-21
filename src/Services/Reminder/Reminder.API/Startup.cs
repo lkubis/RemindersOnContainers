@@ -1,18 +1,14 @@
 ﻿using System.Reflection;
 using Framework.Authentication.JwtBearer;
 using Framework.Authentication.JwtBearer.Extensions;
-using Identity.API.Configuration;
-using Identity.API.Data;
-using Identity.API.Extensions;
-using Identity.API.Models.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Reminder.API.Infrastructure;
 
-namespace Identity.API
+namespace Reminder.API
 {
     public class Startup
     {
@@ -33,27 +29,19 @@ namespace Identity.API
         public void ConfigureServices(IServiceCollection services)
         {
             // Service configuration
-            services.AddOptions();
-            services.Configure<ServiceConfiguration>(Configuration);
-            services.Configure<JwtSecurityTokenOptions>(Configuration.GetSection("IdentityOptions:JwtSecurityToken"));
+            services.Configure<JwtSecurityTokenOptions>(Configuration.GetSection("JwtSecurityToken"));
 
             // DbContext (PostgreSQL)
-            services.AddDbContext<DataContext>(options =>
+            services.AddDbContext<ReminderContext>(options =>
                 options.UseNpgsql(Configuration["ConnectionStrings:DefaultConnection"],
-                x => x.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name)));
+                    x => x.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name)));
 
             // MVC
             services.AddMvc();
 
             // Identity
-            services.AddIdentity<ApplicationUser, ApplicationRole>()
-                .AddEntityFrameworkStores<DataContext>()
-                .AddDefaultTokenProviders();
-
-            services.ConfigureIdentityOptions(Configuration);
-
             var jwtOptions = new JwtSecurityTokenOptions();
-            Configuration.GetSection("IdentityOptions:JwtSecurityToken").Bind(jwtOptions);
+            Configuration.GetSection("JwtSecurityToken").Bind(jwtOptions);
             services.ConfigureJwtAuthentication(jwtOptions, _env);
         }
 
@@ -64,7 +52,7 @@ namespace Identity.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseStaticFiles();
+            app.UseMvc();
             app.UseAuthentication();
             app.UseMvcWithDefaultRoute();
         }

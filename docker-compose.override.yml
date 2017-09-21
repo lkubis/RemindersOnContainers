@@ -8,6 +8,12 @@ services:
     ports:
       - "5101:80"
 
+  reminder.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5102:80"
+
   webmvc:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

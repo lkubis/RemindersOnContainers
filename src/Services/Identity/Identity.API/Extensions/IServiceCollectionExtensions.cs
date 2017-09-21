@@ -1,11 +1,7 @@
 ﻿using System;
-using Framework.Authentication.JwtBearer;
 using Identity.API.Configuration.Sections;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Identity.API.Extensions
 {
@@ -35,42 +31,6 @@ namespace Identity.API.Extensions
                 options.User.RequireUniqueEmail = true;
             });
 
-            return services;
-        }
-
-        public static IServiceCollection ConfigureJwtAuthentication(
-            this IServiceCollection services,
-            IConfigurationRoot configuration,
-            IHostingEnvironment env)
-        {
-            var o = new JwtSecurityTokenOptions();
-            configuration.GetSection("IdentityOptions:JwtSecurityToken").Bind(o);
-
-            services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(options =>
-                {
-                    options.RequireHttpsMetadata = !env.IsDevelopment();
-
-                    options.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = o.SymetricSecurityKey,
-
-                        ValidateIssuer = true,
-                        ValidIssuer = o.Issuer,
-
-                        ValidateAudience = true,
-                        ValidAudience = o.Audience,
-
-                        ValidateLifetime = true,
-                    };
-                });
             return services;
         }
     }
