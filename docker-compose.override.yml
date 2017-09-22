@@ -14,8 +14,16 @@ services:
     ports:
       - "5102:80"
 
+  audit.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5103:80"
+  
   webmvc:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "5100:80"
+
+  

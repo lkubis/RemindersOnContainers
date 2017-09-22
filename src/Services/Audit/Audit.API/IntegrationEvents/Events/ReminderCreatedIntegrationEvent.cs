@@ -1,7 +1,7 @@
 ﻿using System;
 using EventBus.Events;
 
-namespace Reminder.API.IntegrationEvents.Events
+namespace Audit.API.IntegrationEvents.Events
 {
     public class ReminderCreatedIntegrationEvent : IntegrationEvent
     {

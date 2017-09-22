@@ -2,6 +2,14 @@ version: '3'
 
 services:
 
+  audit.api:
+    image: reminders/audit.api:${TAG:-latest}
+    build:
+      context: ./src/Services/Audit/Audit.API
+      dockerfile: Dockerfile
+    depends_on:
+      - nosql.data
+
   identity.api:
     image: reminders/identity.api:${TAG:-latest}
     build:
@@ -39,3 +47,6 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+    
+  nosql.data:
+    image: mongo

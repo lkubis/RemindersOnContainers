@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
+using Audit.API.Infrastructure.Repositories;
+using Audit.API.IntegrationEvents.EventHandling;
+using Audit.API.IntegrationEvents.Events;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using EventBus;
@@ -12,15 +12,12 @@ using Framework.Authentication.JwtBearer.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
-using Reminder.API.Infrastructure;
-using Reminder.API.Infrastructure.Services;
 
-namespace Reminder.API
+namespace Audit.API
 {
     public class Startup
     {
@@ -42,11 +39,7 @@ namespace Reminder.API
         {
             // Service configuration
             services.Configure<JwtSecurityTokenOptions>(Configuration.GetSection("JwtSecurityToken"));
-
-            // DbContext (PostgreSQL)
-            services.AddDbContext<ReminderContext>(options =>
-                options.UseNpgsql(Configuration["ConnectionStrings:DefaultConnection"],
-                    x => x.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name)));
+            services.Configure<AuditSettings>(Configuration);
 
             // RabbitMQ
             RegisterEventBus(services);
@@ -58,12 +51,8 @@ namespace Reminder.API
             var jwtOptions = new JwtSecurityTokenOptions();
             Configuration.GetSection("JwtSecurityToken").Bind(jwtOptions);
             services.ConfigureJwtAuthentication(jwtOptions, _env);
-            
-            // Turn off Microsoft's JWT handler that maps claim types to .NET's long claim type names
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap = new Dictionary<string, string>();
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddTransient<IMessageRepository, MessageRepository>();
 
             var container = new ContainerBuilder();
             container.Populate(services);
@@ -98,11 +87,13 @@ namespace Reminder.API
             });
             services.AddSingleton<IEventBus, EventBusRabbitMQ.EventBusRabbitMQ>();
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+            services.AddTransient<ReminderCreatedIntegrationEventHandler>();
         }
 
         private void ConfigureEventBus(IApplicationBuilder app)
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+            eventBus.Subscribe<ReminderCreatedIntegrationEvent, ReminderCreatedIntegrationEventHandler>();
         }
     }
 }

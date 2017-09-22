@@ -6,6 +6,7 @@ using Framework.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Reminder.API.Infrastructure;
+using Reminder.API.Infrastructure.Services;
 using Reminder.API.IntegrationEvents.Events;
 using Reminder.API.Models.Entities;
 using Reminder.API.ViewModels;
@@ -20,6 +21,7 @@ namespace Reminder.API.Controllers
 
         private readonly ReminderContext _context;
         private readonly IEventBus _eventBus;
+        private readonly IIdentityService _identityService;
 
         #endregion
 
@@ -27,10 +29,12 @@ namespace Reminder.API.Controllers
 
         public RemindersController(
             ReminderContext context,
-            IEventBus eventBus)
+            IEventBus eventBus,
+            IIdentityService identityService)
         {
             _context = context;
             _eventBus = eventBus;
+            _identityService = identityService;
         }
 
         #endregion
@@ -92,7 +96,8 @@ namespace Reminder.API.Controllers
             await _context.SaveChangesAsync();
 
             // Publish integration event
-            var @event = new ReminderCreatedIntegrationEvent(item.Id, item.Title, item.Notes, item.Date);
+            var createdBy = _identityService.GetUserIdentity();
+            var @event = new ReminderCreatedIntegrationEvent(item.Id, item.Title, item.Notes, item.Date, createdBy);
             _eventBus.Publish(@event);
 
             return CreatedAtAction(nameof(GetItemById), new { id = item.Id }, null);
