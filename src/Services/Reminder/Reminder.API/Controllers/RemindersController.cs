@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using EventBus.Abstractions;
 using Framework.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Reminder.API.Infrastructure;
+using Reminder.API.IntegrationEvents.Events;
 using Reminder.API.Models.Entities;
 using Reminder.API.ViewModels;
 
@@ -17,14 +19,18 @@ namespace Reminder.API.Controllers
         #region | Fields
 
         private readonly ReminderContext _context;
+        private readonly IEventBus _eventBus;
 
         #endregion
 
         #region | Constructors
 
-        public RemindersController(ReminderContext context)
+        public RemindersController(
+            ReminderContext context,
+            IEventBus eventBus)
         {
             _context = context;
+            _eventBus = eventBus;
         }
 
         #endregion
@@ -84,6 +90,10 @@ namespace Reminder.API.Controllers
             };
             _context.ReminderItems.Add(item);
             await _context.SaveChangesAsync();
+
+            // Publish integration event
+            var @event = new ReminderCreatedIntegrationEvent(item.Id, item.Title, item.Notes, item.Date);
+            _eventBus.Publish(@event);
 
             return CreatedAtAction(nameof(GetItemById), new { id = item.Id }, null);
         }

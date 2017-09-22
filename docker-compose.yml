@@ -17,6 +17,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - postgres.data
+      - rabbitmq
 
   webmvc:
     image: reminders/webmvc:${TAG:-latest}
@@ -32,3 +33,9 @@ services:
       POSTGRES_USER: sa
       POSTGRES_PASSWORD: sa
       POSTGRES_DB: Identity
+  
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
