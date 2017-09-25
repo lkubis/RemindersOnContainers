@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -34,7 +37,7 @@ namespace Framework.Authentication.JwtBearer.Extensions
                         ValidateAudience = true,
                         ValidAudience = jwtOptions.Audience,
 
-                        ValidateLifetime = true,
+                        ValidateLifetime = true
                     };
                 });
             return services;

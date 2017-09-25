@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -14,11 +15,9 @@ namespace WebMVC.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IIdentityService _identityService;
-
         #region | Fields
 
-
+        private readonly IIdentityService _identityService;
 
         #endregion
 
@@ -65,7 +64,11 @@ namespace WebMVC.Controllers
                 {
                     var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(tokenResponse.Token);
                     var principal = new ClaimsPrincipal();
-                    principal.AddIdentity(new ClaimsIdentity(jwtToken.Claims));
+                    principal.AddIdentity(new ClaimsIdentity(
+                        jwtToken.Claims.Union(
+                        new List<Claim>() { new Claim("access_token", tokenResponse.Token) })
+                    ));
+
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal,
                         new AuthenticationProperties(new Dictionary<string, string>(){{"token_expires", tokenResponse.Expiration.ToString("O")}}));
                 }
@@ -86,7 +89,7 @@ namespace WebMVC.Controllers
         public async Task<IActionResult> Signout()
         {
             await HttpContext.SignOutAsync("Cookies");
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToAction(nameof(AccountController.Login), "Account");
         }
 
         #endregion

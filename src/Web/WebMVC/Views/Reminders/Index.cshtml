@@ -1,0 +1,36 @@
+﻿@model PaginatedItemsViewModel<WebMVC.ViewModels.Reminder.ReminderViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<a asp-action="Create">Create New</a>
+
+<table class="table">
+  <thead>
+    <tr>
+      <td>@Html.DisplayNameFor(model => model.Data.First().Title)</td>
+      <td>@Html.DisplayNameFor(model => model.Data.First().Notes)</td>
+      <td>@Html.DisplayNameFor(model => model.Data.First().Date)</td>
+      <td>@Html.DisplayNameFor(model => model.Data.First().CompletionDate)</td>
+      <td></td>
+    </tr>
+  </thead>
+  <tbody>
+    @foreach (var item in Model.Data)
+    {
+        <tr>
+          <td>@Html.DisplayFor(modelItem => item.Title)</td>
+          <td>@Html.DisplayFor(modelItem => item.Notes)</td>
+          <td>@Html.DisplayFor(modelItem => item.Date)</td>
+          <td>@Html.DisplayFor(modelItem => item.CompletionDate)</td>
+          <td>
+            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+          </td>
+        </tr>
+    }
+  </tbody>
+</table>

@@ -5,6 +5,7 @@
         public Connectionstrings ConnectionStrings { get; set; }
         public Logging Logging { get; set; }
         public string IdentityUrl { get; set; }
+        public string ReminderUrl { get; set; }
     }
 
     public class Connectionstrings

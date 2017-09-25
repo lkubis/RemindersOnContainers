@@ -61,8 +61,9 @@ namespace WebMVC
                 });
 
             // Add application services
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IIdentityService, IdentityService>();
+            services.AddTransient<IReminderService, ReminderService>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IHttpClient, StandardHttpClient>();
         }
 
@@ -86,7 +87,7 @@ namespace WebMVC
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Reminders}/{action=Index}/{id?}");
             });
         }
     }
