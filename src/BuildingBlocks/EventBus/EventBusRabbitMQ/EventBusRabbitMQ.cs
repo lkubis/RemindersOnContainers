@@ -149,7 +149,7 @@ namespace EventBusRabbitMQ
             };
 
             channel.BasicConsume(queue: _queueName,
-                autoAck: false,
+                autoAck: true,
                 consumer: consumer);
 
             channel.CallbackException += (sender, ea) =>

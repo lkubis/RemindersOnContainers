@@ -9,6 +9,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - nosql.data
+      - rabbitmq
 
   identity.api:
     image: reminders/identity.api:${TAG:-latest}
@@ -17,6 +18,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - postgres.data
+      - rabbitmq
 
   reminder.api:
     image: reminders/reminders.api:${TAG:-latest}
@@ -34,7 +36,15 @@ services:
       dockerfile: Dockerfile
     depends_on:
     - identity.api
+    - reminder.api
+    - audit.api
 
+  webstatus:
+    image: reminders/webstatus:${TAG:-latest}
+    build:
+      context: ./src/Web/WebStatus
+      dockerfile: Dockerfile
+    
   postgres.data:
     image: postgres
     environment:

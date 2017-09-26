@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using Framework.Authentication.JwtBearer;
 using Framework.Authentication.JwtBearer.Extensions;
 using Identity.API.Configuration;
@@ -36,6 +37,17 @@ namespace Identity.API
             services.AddOptions();
             services.Configure<ServiceConfiguration>(Configuration);
             services.Configure<JwtSecurityTokenOptions>(Configuration.GetSection("IdentityOptions:JwtSecurityToken"));
+
+            // Health check
+            services.AddHealthChecks(checks =>
+            {
+                var minutes = 1;
+                if (int.TryParse(Configuration["HealthCheck:Timeout"], out var minutesParsed))
+                    minutes = minutesParsed;
+
+                checks.AddPostgreSqlCheck("Identity", Configuration["ConnectionStrings:DefaultConnection"], TimeSpan.FromMinutes(minutes));
+            });
+
 
             // DbContext (PostgreSQL)
             services.AddDbContext<DataContext>(options =>

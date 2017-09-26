@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using Framework.Authentication.JwtBearer;
 using Framework.Authentication.JwtBearer.Extensions;
-using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Resilience.Http;
@@ -31,6 +32,19 @@ namespace WebMVC
             services.AddOptions();
             services.Configure<AppSettings>(Configuration);
             services.Configure<IOptions<JwtSecurityTokenOptions>>(Configuration.GetSection("JwtSecurityToken"));
+
+            // Health check
+            services.AddHealthChecks(checks =>
+            {
+                var minutes = 1;
+                if (int.TryParse(Configuration["HealthCheck:Timeout"], out var minutesParsed))
+                    minutes = minutesParsed;
+
+                checks.AddUrlCheck(Configuration["IdentityUrl"] + "/hc", TimeSpan.FromMinutes(minutes));
+                checks.AddUrlCheck(Configuration["ReminderUrl"] + "/hc", TimeSpan.FromMinutes(minutes));
+                checks.AddUrlCheck(Configuration["AuditUrl"] + "/hc", TimeSpan.FromMinutes(minutes));
+            });
+
             // MVC
             services.AddMvc();
 

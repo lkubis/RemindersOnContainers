@@ -17,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
+using Reminder.API.Extensions;
 using Reminder.API.Infrastructure;
 using Reminder.API.Infrastructure.Services;
 
@@ -42,6 +43,16 @@ namespace Reminder.API
         {
             // Service configuration
             services.Configure<JwtSecurityTokenOptions>(Configuration.GetSection("JwtSecurityToken"));
+
+            // Health check
+            services.AddHealthChecks(checks =>
+            {
+                var minutes = 1;
+                if (int.TryParse(Configuration["HealthCheck:Timeout"], out var minutesParsed))
+                    minutes = minutesParsed;
+
+                checks.AddPostgreSqlCheck("Reminder", Configuration["ConnectionStrings:DefaultConnection"], TimeSpan.FromMinutes(minutes));
+            });
 
             // DbContext (PostgreSQL)
             services.AddDbContext<ReminderContext>(options =>

@@ -6,6 +6,7 @@
         public Logging Logging { get; set; }
         public string IdentityUrl { get; set; }
         public string ReminderUrl { get; set; }
+        public string UditUrl { get; set; }
     }
 
     public class Connectionstrings
@@ -24,5 +25,10 @@
         public string Default { get; set; }
         public string System { get; set; }
         public string Microsoft { get; set; }
+    }
+
+    public class HealthCheck
+    {
+        public int Timeout { get; set; }
     }
 }

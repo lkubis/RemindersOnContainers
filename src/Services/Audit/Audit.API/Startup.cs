@@ -1,4 +1,5 @@
 ﻿using System;
+using Audit.API.Extensions;
 using Audit.API.Infrastructure.Repositories;
 using Audit.API.IntegrationEvents.EventHandling;
 using Audit.API.IntegrationEvents.Events;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.HealthChecks;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 
@@ -40,6 +42,16 @@ namespace Audit.API
             // Service configuration
             services.Configure<JwtSecurityTokenOptions>(Configuration.GetSection("JwtSecurityToken"));
             services.Configure<AuditSettings>(Configuration);
+
+            // Health check
+            services.AddHealthChecks(checks =>
+            {
+                var minutes = 1;
+                if (int.TryParse(Configuration["HealthCheck:Timeout"], out var minutesParsed))
+                    minutes = minutesParsed;
+
+                checks.AddMongoDbCheck("AuditDb", Configuration["ConnectionString"], TimeSpan.FromMinutes(minutes));
+            });
 
             // RabbitMQ
             RegisterEventBus(services);
