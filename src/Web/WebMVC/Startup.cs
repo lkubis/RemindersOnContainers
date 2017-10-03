@@ -94,6 +94,9 @@ namespace WebMVC
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseStatusCodePages();
+            //app.UseStatusCodePages("text/plain", "Status code page, status code: {0}");
+
             app.UseStaticFiles();
 
             app.UseAuthentication();
